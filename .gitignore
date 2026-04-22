@@ -3,6 +3,13 @@
 !.env.example
 
 node_modules/
+.browserstack/
+log/
+logs/
+tmp/
+percy.exe
+percy.exe.etag
+percy.exe.zip
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

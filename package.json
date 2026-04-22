@@ -1,9 +1,10 @@
 {
-  "name": "mobile-tests",
+  "name": "browserstack-mobile-tests",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "wdio run wdio.conf.js"
+    "test": "wdio run wdio.conf.js",
+    "test:all": "wdio run wdio.conf.js --spec ./test/**/*.js"
   },
   "devDependencies": {
     "@wdio/browserstack-service": "^9.6.0",
