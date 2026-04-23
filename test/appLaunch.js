@@ -1,5 +1,17 @@
 describe('App launch', () => {
-  it('should open the app', async () => {
-    await driver.pause(45000);
+  let source = '';
+
+  afterEach(() => {
+    if (!source) {
+      return;
+    }
+
+    console.log('----- PAGE SOURCE START -----');
+    console.log(source);
+    console.log('----- PAGE SOURCE END -----');
+  });
+
+  it('debug UI', async () => {
+    source = await driver.getPageSource();
   });
 });

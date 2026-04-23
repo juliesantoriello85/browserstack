@@ -12,6 +12,8 @@ if (!fs.existsSync(browserstackFilesDir)) {
 process.env.BROWSERSTACK_FILES_DIR = browserstackFilesDir;
 
 const defaultSpec = './test/appLaunch.js';
+const browserstackApp =
+  process.env.BROWSERSTACK_APP || process.env.BROWSERSTACK_APP_ID;
 const deviceProfiles = {
   samsung_s22: {
     platformName: 'Android',
@@ -45,6 +47,13 @@ if (!selectedProfile) {
   );
 }
 
+if (!browserstackApp) {
+  throw new Error(
+    'Set BROWSERSTACK_APP (or legacy BROWSERSTACK_APP_ID) to a BrowserStack app ' +
+    'reference such as bs://..., a custom_id, or a shareable_id.'
+  );
+}
+
 exports.config = {
   runner: 'local',
 
@@ -63,7 +72,7 @@ exports.config = {
 
   services: [
     ['browserstack', {
-      app: process.env.BROWSERSTACK_APP_ID,
+      app: browserstackApp,
       percy: false
     }]
   ],
@@ -74,8 +83,8 @@ exports.config = {
     'bstack:options': {
       deviceName: selectedProfile.deviceName,
       platformVersion: selectedProfile.platformVersion,
-      projectName: 'mobile-tests',
-      buildName: 'mobile device matrix',
+      projectName: 'TheApp demo',
+      buildName: 'TheApp smoke',
       sessionName: selectedProfile.sessionName,
       interactiveDebugging: true,
       video: true

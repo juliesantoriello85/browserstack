@@ -12,7 +12,7 @@ browserstack/
 |-- wdio.conf.js
 `-- test/
     |-- appLaunch.js
-    `-- login.test.js
+    `-- echoBox.test.js
 ```
 
 ## Install Dependencies
@@ -30,9 +30,68 @@ Set the required values in `.env`:
 ```env
 BROWSERSTACK_USERNAME=your_username
 BROWSERSTACK_ACCESS_KEY=your_access_key
-BROWSERSTACK_APP_ID=bs://your_app_id
+BROWSERSTACK_APP=bs://your_app_id
 BROWSERSTACK_DEVICE_PROFILE=samsung_s22
 ```
+
+`BROWSERSTACK_APP` can be:
+
+- a BrowserStack `app_url` such as `bs://...`
+- a BrowserStack `custom_id`
+- a BrowserStack `shareable_id`
+
+`BROWSERSTACK_APP_ID` is still accepted as a legacy fallback, but `BROWSERSTACK_APP` is the preferred variable name.
+
+## Use TheApp On BrowserStack
+
+Recommended first setup: use the Android build of `appium-pro/TheApp`.
+
+1. Download the latest Android `.apk` release for TheApp from the GitHub releases page.
+2. Upload it to BrowserStack.
+3. Copy the returned BrowserStack app reference.
+4. Put that value in `.env` as `BROWSERSTACK_APP=...`.
+5. Run the smoke test with an Android profile such as `samsung_s22` or `pixel_8`.
+
+Example `.env`:
+
+```env
+BROWSERSTACK_USERNAME=your_username
+BROWSERSTACK_ACCESS_KEY=your_access_key
+BROWSERSTACK_APP=bs://your_uploaded_theapp_id
+BROWSERSTACK_DEVICE_PROFILE=samsung_s22
+```
+
+### Upload Using BrowserStack UI
+
+In the BrowserStack App Automate dashboard:
+
+1. Open `App Management`.
+2. Click `Upload App`.
+3. Upload the TheApp `.apk`.
+4. Copy the generated app id / app URL.
+
+### Upload Using BrowserStack API
+
+If the TheApp `.apk` is already on your machine, upload it with:
+
+```bash
+curl -u "YOUR_USERNAME:YOUR_ACCESS_KEY" ^
+  -X POST "https://api-cloud.browserstack.com/app-automate/upload" ^
+  -F "file=@C:\path\to\TheApp.apk" ^
+  -F "custom_id=theapp-android"
+```
+
+Then set:
+
+```env
+BROWSERSTACK_APP=theapp-android
+```
+
+Using a stable `custom_id` makes it easy to replace the uploaded build later without changing the test config.
+
+### Why Start With Android
+
+TheApp publishes Android `.apk` releases and iOS `.app.zip` releases. BrowserStack App Automate accepts Android app uploads as `.apk` / `.aab` / `.xapk`, but for iOS it expects `.ipa`, so Android is the cleanest way to get started quickly with this demo app.
 
 ## Run A Single Test
 
@@ -59,7 +118,7 @@ npm run test:all
 At the moment, this includes:
 
 - `test/appLaunch.js`
-- `test/login.test.js`
+- `test/echoBox.test.js`
 
 ## Switch Devices
 
@@ -97,6 +156,6 @@ The device profiles are defined in `wdio.conf.js`:
 
 - `npx wdio run wdio.conf.js --spec ./test/myNewTest.js` runs one specific test file.
 - `npm run test:all` runs all specs under `test/`.
-- `test/login.test.js` is currently a placeholder and its only test is marked `skip`, so it will not execute real login steps until that file is implemented.
-- BrowserStack credentials and app id must be valid for the run to start.
+- `test/echoBox.test.js` opens TheApp Echo Box screen using an accessibility id selector.
+- BrowserStack credentials and `BROWSERSTACK_APP` must be valid for the run to start.
 - The selected device profile affects both single-test and all-tests runs.
