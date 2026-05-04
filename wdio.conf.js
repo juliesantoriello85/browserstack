@@ -12,8 +12,6 @@ if (!fs.existsSync(browserstackFilesDir)) {
 process.env.BROWSERSTACK_FILES_DIR = browserstackFilesDir;
 
 const defaultSpecs = ['./test/**/*.js'];
-const browserstackApp =
-  process.env.BROWSERSTACK_APP || process.env.BROWSERSTACK_APP_ID;
 const deviceProfiles = {
   samsung_s22: {
     platformName: 'Android',
@@ -40,6 +38,39 @@ const deviceProfiles = {
 const selectedProfileName = process.env.BROWSERSTACK_DEVICE_PROFILE || 'samsung_s22';
 const selectedProfile = deviceProfiles[selectedProfileName];
 
+function resolveBrowserstackApp(profile) {
+  const genericApp = process.env.BROWSERSTACK_APP || process.env.BROWSERSTACK_APP_ID;
+  const platformApps = {
+    Android: process.env.BROWSERSTACK_APP_ANDROID || process.env.BROWSERSTACK_ANDROID_APP,
+    iOS: process.env.BROWSERSTACK_APP_IOS || process.env.BROWSERSTACK_IOS_APP
+  };
+  const selectedApp = platformApps[profile.platformName];
+
+  if (selectedApp) {
+    return selectedApp;
+  }
+
+  if (genericApp && profile.platformName === 'Android') {
+    return genericApp;
+  }
+
+  if (profile.platformName === 'iOS') {
+    throw new Error(
+      'Selected iOS profile requires BROWSERSTACK_APP_IOS (or legacy BROWSERSTACK_IOS_APP) ' +
+      'to point to an iOS build uploaded to BrowserStack.'
+    );
+  }
+
+  if (genericApp) {
+    return genericApp;
+  }
+
+  throw new Error(
+    'Set BROWSERSTACK_APP_ANDROID (preferred) or BROWSERSTACK_APP to a BrowserStack app ' +
+    'reference such as bs://..., a custom_id, or a shareable_id.'
+  );
+}
+
 if (!selectedProfile) {
   throw new Error(
     `Unknown BROWSERSTACK_DEVICE_PROFILE "${selectedProfileName}". ` +
@@ -47,12 +78,7 @@ if (!selectedProfile) {
   );
 }
 
-if (!browserstackApp) {
-  throw new Error(
-    'Set BROWSERSTACK_APP (or legacy BROWSERSTACK_APP_ID) to a BrowserStack app ' +
-    'reference such as bs://..., a custom_id, or a shareable_id.'
-  );
-}
+const browserstackApp = resolveBrowserstackApp(selectedProfile);
 
 exports.config = {
   runner: 'local',

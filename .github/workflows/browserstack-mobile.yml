@@ -23,10 +23,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      BROWSERSTACK_USERNAME: ${{ secrets.BS_USER }}
-      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BS_KEY }}
-      BROWSERSTACK_APP: ${{ secrets.BS_APP }}
-      BROWSERSTACK_DEVICE_PROFILE: samsung_s22
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      BROWSERSTACK_APP: ${{ secrets.BROWSERSTACK_APP }}
+      BROWSERSTACK_APP_ANDROID: ${{ secrets.BROWSERSTACK_APP_ANDROID }}
+      BROWSERSTACK_APP_IOS: ${{ secrets.BROWSERSTACK_APP_IOS }}
+      BROWSERSTACK_DEVICE_PROFILE: ${{ vars.BROWSERSTACK_DEVICE_PROFILE || 'samsung_s22' }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -56,10 +58,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      BROWSERSTACK_USERNAME: ${{ secrets.BS_USER }}
-      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BS_KEY }}
-      BROWSERSTACK_APP: ${{ secrets.BS_APP }}
-      BROWSERSTACK_DEVICE_PROFILE: samsung_s22
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      BROWSERSTACK_APP: ${{ secrets.BROWSERSTACK_APP }}
+      BROWSERSTACK_APP_ANDROID: ${{ secrets.BROWSERSTACK_APP_ANDROID }}
+      BROWSERSTACK_APP_IOS: ${{ secrets.BROWSERSTACK_APP_IOS }}
+      BROWSERSTACK_DEVICE_PROFILE: ${{ vars.BROWSERSTACK_DEVICE_PROFILE || 'samsung_s22' }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -89,10 +93,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
-      BROWSERSTACK_USERNAME: ${{ secrets.BS_USER }}
-      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BS_KEY }}
-      BROWSERSTACK_APP: ${{ secrets.BS_APP }}
-      BROWSERSTACK_DEVICE_PROFILE: samsung_s22
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      BROWSERSTACK_APP: ${{ secrets.BROWSERSTACK_APP }}
+      BROWSERSTACK_APP_ANDROID: ${{ secrets.BROWSERSTACK_APP_ANDROID }}
+      BROWSERSTACK_APP_IOS: ${{ secrets.BROWSERSTACK_APP_IOS }}
+      BROWSERSTACK_DEVICE_PROFILE: ${{ vars.BROWSERSTACK_DEVICE_PROFILE || 'samsung_s22' }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -122,10 +128,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      BROWSERSTACK_USERNAME: ${{ secrets.BS_USER }}
-      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BS_KEY }}
-      BROWSERSTACK_APP: ${{ secrets.BS_APP }}
-      BROWSERSTACK_DEVICE_PROFILE: samsung_s22
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      BROWSERSTACK_APP: ${{ secrets.BROWSERSTACK_APP }}
+      BROWSERSTACK_APP_ANDROID: ${{ secrets.BROWSERSTACK_APP_ANDROID }}
+      BROWSERSTACK_APP_IOS: ${{ secrets.BROWSERSTACK_APP_IOS }}
+      BROWSERSTACK_DEVICE_PROFILE: ${{ vars.BROWSERSTACK_DEVICE_PROFILE || 'samsung_s22' }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -155,10 +163,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      BROWSERSTACK_USERNAME: ${{ secrets.BS_USER }}
-      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BS_KEY }}
-      BROWSERSTACK_APP: ${{ secrets.BS_APP }}
-      BROWSERSTACK_DEVICE_PROFILE: samsung_s22
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      BROWSERSTACK_APP: ${{ secrets.BROWSERSTACK_APP }}
+      BROWSERSTACK_APP_ANDROID: ${{ secrets.BROWSERSTACK_APP_ANDROID }}
+      BROWSERSTACK_APP_IOS: ${{ secrets.BROWSERSTACK_APP_IOS }}
+      BROWSERSTACK_DEVICE_PROFILE: ${{ vars.BROWSERSTACK_DEVICE_PROFILE || 'samsung_s22' }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
