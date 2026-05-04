@@ -191,6 +191,37 @@ Typical split:
 
 You can swap `@smoke` for any other tag set that matches your CI strategy.
 
+## GitHub Actions
+
+A ready-to-use workflow is available at [.github/workflows/browserstack-mobile.yml](/c:/Users/julie.santoriello/workspace/browserstack/.github/workflows/browserstack-mobile.yml:1).
+
+It does two things:
+
+- on pull requests, it runs separate jobs for `@smoke`, `@boundary`, `@regression`, and `@navigation`
+- on the nightly schedule at `02:00` UTC, and on manual dispatch, it runs the full suite with `npx wdio run wdio.conf.js`
+
+Before it can run in GitHub, create these repository secrets:
+
+- `BS_USER` -> your BrowserStack username
+- `BS_KEY` -> your BrowserStack access key
+- `BS_APP` -> your BrowserStack app reference such as `bs://...` or a stable `custom_id`
+
+Recommended setup:
+
+1. Push this workflow file to your repository.
+2. In GitHub, open `Settings` -> `Secrets and variables` -> `Actions`.
+3. Add `BS_USER`, `BS_KEY`, and `BS_APP`.
+4. Open the `Actions` tab and confirm that GitHub Actions is enabled for the repository.
+5. Merge or open a pull request to trigger the smoke job.
+6. Use `Run workflow` in the `Actions` tab if you want to trigger the full suite manually before the nightly schedule.
+
+Notes:
+
+- the workflow uses `npm ci`, so `package-lock.json` must stay committed
+- the default device profile in CI is `samsung_s22`
+- each pull request tag lane is a separate job, so you can keep, remove, or rename them as your tag strategy evolves
+- pull requests coming from forks usually do not receive repository secrets, so BrowserStack runs are most reliable for branches inside the same repository or trusted contributors
+
 ## Switch Devices
 
 The active device is controlled by `BROWSERSTACK_DEVICE_PROFILE` in `.env`.

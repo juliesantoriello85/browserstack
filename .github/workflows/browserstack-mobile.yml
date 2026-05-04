@@ -1,0 +1,183 @@
+name: BrowserStack Mobile
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/browserstack-mobile.yml"
+      - "package.json"
+      - "package-lock.json"
+      - "wdio.conf.js"
+      - "test/**"
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: browserstack-mobile-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pr-smoke:
+    name: PR smoke suite
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      BROWSERSTACK_USERNAME: ${{ secrets.BS_USER }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BS_KEY }}
+      BROWSERSTACK_APP: ${{ secrets.BS_APP }}
+      BROWSERSTACK_DEVICE_PROFILE: samsung_s22
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify BrowserStack secrets
+        shell: bash
+        run: |
+          test -n "$BROWSERSTACK_USERNAME"
+          test -n "$BROWSERSTACK_ACCESS_KEY"
+          test -n "$BROWSERSTACK_APP"
+
+      - name: Run smoke tests on BrowserStack
+        run: npx wdio run wdio.conf.js --mochaOpts.grep "@smoke"
+
+  pr-boundary:
+    name: PR boundary suite
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      BROWSERSTACK_USERNAME: ${{ secrets.BS_USER }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BS_KEY }}
+      BROWSERSTACK_APP: ${{ secrets.BS_APP }}
+      BROWSERSTACK_DEVICE_PROFILE: samsung_s22
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify BrowserStack secrets
+        shell: bash
+        run: |
+          test -n "$BROWSERSTACK_USERNAME"
+          test -n "$BROWSERSTACK_ACCESS_KEY"
+          test -n "$BROWSERSTACK_APP"
+
+      - name: Run boundary tests on BrowserStack
+        run: npx wdio run wdio.conf.js --mochaOpts.grep "@boundary"
+
+  pr-regression:
+    name: PR regression suite
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      BROWSERSTACK_USERNAME: ${{ secrets.BS_USER }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BS_KEY }}
+      BROWSERSTACK_APP: ${{ secrets.BS_APP }}
+      BROWSERSTACK_DEVICE_PROFILE: samsung_s22
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify BrowserStack secrets
+        shell: bash
+        run: |
+          test -n "$BROWSERSTACK_USERNAME"
+          test -n "$BROWSERSTACK_ACCESS_KEY"
+          test -n "$BROWSERSTACK_APP"
+
+      - name: Run regression tests on BrowserStack
+        run: npx wdio run wdio.conf.js --mochaOpts.grep "@regression"
+
+  pr-navigation:
+    name: PR navigation suite
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      BROWSERSTACK_USERNAME: ${{ secrets.BS_USER }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BS_KEY }}
+      BROWSERSTACK_APP: ${{ secrets.BS_APP }}
+      BROWSERSTACK_DEVICE_PROFILE: samsung_s22
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify BrowserStack secrets
+        shell: bash
+        run: |
+          test -n "$BROWSERSTACK_USERNAME"
+          test -n "$BROWSERSTACK_ACCESS_KEY"
+          test -n "$BROWSERSTACK_APP"
+
+      - name: Run navigation tests on BrowserStack
+        run: npx wdio run wdio.conf.js --mochaOpts.grep "@navigation"
+
+  nightly-full:
+    name: Nightly full suite
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      BROWSERSTACK_USERNAME: ${{ secrets.BS_USER }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BS_KEY }}
+      BROWSERSTACK_APP: ${{ secrets.BS_APP }}
+      BROWSERSTACK_DEVICE_PROFILE: samsung_s22
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify BrowserStack secrets
+        shell: bash
+        run: |
+          test -n "$BROWSERSTACK_USERNAME"
+          test -n "$BROWSERSTACK_ACCESS_KEY"
+          test -n "$BROWSERSTACK_APP"
+
+      - name: Run full suite on BrowserStack
+        run: npx wdio run wdio.conf.js
