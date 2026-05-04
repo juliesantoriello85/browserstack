@@ -11,7 +11,7 @@ if (!fs.existsSync(browserstackFilesDir)) {
 
 process.env.BROWSERSTACK_FILES_DIR = browserstackFilesDir;
 
-const defaultSpec = './test/appLaunch.js';
+const defaultSpecs = ['./test/**/*.js'];
 const browserstackApp =
   process.env.BROWSERSTACK_APP || process.env.BROWSERSTACK_APP_ID;
 const deviceProfiles = {
@@ -60,7 +60,7 @@ exports.config = {
   user: process.env.BROWSERSTACK_USERNAME,
   key: process.env.BROWSERSTACK_ACCESS_KEY,
 
-  specs: [process.env.WDIO_SPEC || defaultSpec],
+  specs: process.env.WDIO_SPEC ? [process.env.WDIO_SPEC] : defaultSpecs,
 
   maxInstances: 1,
   logLevel: 'info',

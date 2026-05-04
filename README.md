@@ -11,8 +11,12 @@ browserstack/
 |-- package-lock.json
 |-- wdio.conf.js
 `-- test/
-    |-- appLaunch.js
-    `-- echoBox.test.js
+    |-- @boundary/
+    |-- @navigation/
+    |-- @regression/
+    |   `-- echoBox.test.js
+    `-- @smoke/
+        `-- appLaunch.test.js
 ```
 
 ## Install Dependencies
@@ -104,7 +108,7 @@ npx wdio run wdio.conf.js --spec ./test/myNewTest.js
 Example:
 
 ```bash
-npx wdio run wdio.conf.js --spec ./test/appLaunch.js
+npx wdio run wdio.conf.js --spec ./test/@smoke/appLaunch.test.js
 ```
 
 ## Run All Tests
@@ -112,13 +116,80 @@ npx wdio run wdio.conf.js --spec ./test/appLaunch.js
 To run every file inside `test/`, use:
 
 ```bash
-npm run test:all
+npx wdio run wdio.conf.js
 ```
 
 At the moment, this includes:
 
-- `test/appLaunch.js`
-- `test/echoBox.test.js`
+- `test/@smoke/appLaunch.test.js`
+- `test/@regression/echoBox.test.js`
+
+`npm run test:all` still works and now resolves to the same full-suite behavior.
+
+## Organize Tests With Tags
+
+Tests are grouped under tagged sub-folders in `test/`, and each spec title also contains one or more tags so you can filter with Mocha `grep`.
+
+Current primary folders:
+
+- `@regression`
+- `@boundary`
+- `@smoke`
+- `@navigation`
+
+The folder is for organization. The tag in the `describe(...)` title is what drives CI selection, because a test can belong to several tags at once, including platform tags such as `@android` and `@ios`.
+
+Current examples:
+
+- `test/@smoke/appLaunch.test.js` -> `@smoke @android @ios`
+- `test/@regression/echoBox.test.js` -> `@regression @smoke @android @navigation`
+
+## Run Tests By Tag
+
+Run smoke tests:
+
+```bash
+npx wdio run wdio.conf.js --mochaOpts.grep "@smoke"
+```
+
+Run regression tests:
+
+```bash
+npx wdio run wdio.conf.js --mochaOpts.grep "@regression"
+```
+
+Run Android-only tests:
+
+```bash
+npx wdio run wdio.conf.js --mochaOpts.grep "@android"
+```
+
+Run iOS-tagged tests:
+
+```bash
+npx wdio run wdio.conf.js --mochaOpts.grep "@ios"
+```
+
+Run the full nightly suite:
+
+```bash
+npx wdio run wdio.conf.js
+```
+
+You can combine tags in a single regular expression when needed. For example, to run PR smoke coverage on Android:
+
+```bash
+npx wdio run wdio.conf.js --mochaOpts.grep "(?=.*@smoke)(?=.*@android)"
+```
+
+## CI Usage
+
+Typical split:
+
+- Pull request run: `npx wdio run wdio.conf.js --mochaOpts.grep "@smoke"`
+- Nightly run: `npx wdio run wdio.conf.js`
+
+You can swap `@smoke` for any other tag set that matches your CI strategy.
 
 ## Switch Devices
 
@@ -155,7 +226,8 @@ The device profiles are defined in `wdio.conf.js`:
 ## Notes
 
 - `npx wdio run wdio.conf.js --spec ./test/myNewTest.js` runs one specific test file.
-- `npm run test:all` runs all specs under `test/`.
-- `test/echoBox.test.js` opens TheApp Echo Box screen using an accessibility id selector.
+- `npx wdio run wdio.conf.js` runs all specs under `test/`.
+- `npx wdio run wdio.conf.js --mochaOpts.grep "@smoke"` runs only tests whose title contains `@smoke`.
+- `test/@regression/echoBox.test.js` opens TheApp Echo Box screen using an accessibility id selector.
 - BrowserStack credentials and `BROWSERSTACK_APP` must be valid for the run to start.
 - The selected device profile affects both single-test and all-tests runs.

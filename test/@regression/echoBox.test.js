@@ -1,4 +1,4 @@
-describe('Echo Box', () => {
+describe('Echo Box @regression @smoke @android @navigation', () => {
   let source = '';
 
   afterEach(() => {

@@ -1,4 +1,4 @@
-describe('App launch', () => {
+describe('App launch @smoke @android @ios', () => {
   let source = '';
 
   afterEach(() => {
@@ -11,7 +11,7 @@ describe('App launch', () => {
     console.log('----- PAGE SOURCE END -----');
   });
 
-  it('debug UI', async () => {
+  it('should load the app shell', async () => {
     source = await driver.getPageSource();
   });
 });
