@@ -94,7 +94,7 @@ exports.config = {
       deviceName: selectedProfile.deviceName,
       platformVersion: selectedProfile.platformVersion,
       projectName: 'TheApp demo',
-      buildName: 'TheApp smoke',
+      buildName: process.env.BROWSERSTACK_BUILD_NAME || 'TheApp mobile tests',
       sessionName: selectedProfile.sessionName,
       interactiveDebugging: true,
       video: true

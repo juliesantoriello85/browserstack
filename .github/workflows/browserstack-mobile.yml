@@ -29,6 +29,8 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      BROWSERSTACK_BUILD_NAME: TheApp PR smoke
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -58,6 +60,8 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      BROWSERSTACK_BUILD_NAME: TheApp PR boundary
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -87,6 +91,8 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      BROWSERSTACK_BUILD_NAME: TheApp PR regression
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -116,6 +122,8 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      BROWSERSTACK_BUILD_NAME: TheApp PR navigation
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -145,6 +153,8 @@ jobs:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    env:
+      BROWSERSTACK_BUILD_NAME: TheApp full suite
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
