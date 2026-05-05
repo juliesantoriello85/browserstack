@@ -39,10 +39,9 @@ const selectedProfileName = process.env.BROWSERSTACK_DEVICE_PROFILE || 'samsung_
 const selectedProfile = deviceProfiles[selectedProfileName];
 
 function resolveBrowserstackApp(profile) {
-  const genericApp = process.env.BROWSERSTACK_APP || process.env.BROWSERSTACK_APP_ID;
   const platformApps = {
-    Android: process.env.BROWSERSTACK_APP_ANDROID || process.env.BROWSERSTACK_ANDROID_APP,
-    iOS: process.env.BROWSERSTACK_APP_IOS || process.env.BROWSERSTACK_IOS_APP
+    Android: process.env.BROWSERSTACK_APP_ANDROID,
+    iOS: process.env.BROWSERSTACK_APP_IOS
   };
   const selectedApp = platformApps[profile.platformName];
 
@@ -50,24 +49,9 @@ function resolveBrowserstackApp(profile) {
     return selectedApp;
   }
 
-  if (genericApp && profile.platformName === 'Android') {
-    return genericApp;
-  }
-
-  if (profile.platformName === 'iOS') {
-    throw new Error(
-      'Selected iOS profile requires BROWSERSTACK_APP_IOS (or legacy BROWSERSTACK_IOS_APP) ' +
-      'to point to an iOS build uploaded to BrowserStack.'
-    );
-  }
-
-  if (genericApp) {
-    return genericApp;
-  }
-
   throw new Error(
-    'Set BROWSERSTACK_APP_ANDROID (preferred) or BROWSERSTACK_APP to a BrowserStack app ' +
-    'reference such as bs://..., a custom_id, or a shareable_id.'
+    `Selected ${profile.platformName} profile requires ${profile.platformName === 'iOS' ? 'BROWSERSTACK_APP_IOS' : 'BROWSERSTACK_APP_ANDROID'} ` +
+    'to point to a BrowserStack app reference such as bs://..., a custom_id, or a shareable_id.'
   );
 }
 

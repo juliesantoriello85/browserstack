@@ -39,8 +39,6 @@ BROWSERSTACK_APP_IOS=bs://your_ios_app_id
 BROWSERSTACK_DEVICE_PROFILE=samsung_s22
 ```
 
-Preferred setup for a project that runs on both Android and iOS:
-
 - `BROWSERSTACK_APP_ANDROID` for Android builds
 - `BROWSERSTACK_APP_IOS` for iOS builds
 
@@ -49,11 +47,6 @@ Each app value can be:
 - a BrowserStack `app_url` such as `bs://...`
 - a BrowserStack `custom_id`
 - a BrowserStack `shareable_id`
-
-Backward compatibility:
-
-- `BROWSERSTACK_APP` still works as a generic fallback and is mainly useful for Android-only setups
-- `BROWSERSTACK_APP_ID` is still accepted as a legacy fallback
 
 ## Use TheApp On BrowserStack
 
@@ -119,8 +112,6 @@ The selected device profile controls both the device and which app reference is 
 
 - Android profiles such as `samsung_s22` and `pixel_8` use `BROWSERSTACK_APP_ANDROID`
 - iOS profiles such as `iphone_15` use `BROWSERSTACK_APP_IOS`
-
-For backward compatibility, Android profiles can still fall back to `BROWSERSTACK_APP`. iOS profiles do not use the generic fallback, because an Android app id on an iPhone profile would fail anyway.
 
 This means `@ios` and `@android` are still just test tags. The actual platform run is determined by:
 
@@ -251,31 +242,13 @@ Before it can run in GitHub, create these repository secrets:
 - `BROWSERSTACK_APP_ANDROID` -> your Android BrowserStack app reference such as `bs://...` or a stable `custom_id`
 - `BROWSERSTACK_APP_IOS` -> your iOS BrowserStack app reference such as `bs://...` or a stable `custom_id`
 
-Optional compatibility secret:
+Add them in GitHub under `Settings` -> `Secrets and variables` -> `Actions` -> `Secrets` -> `Repository secrets`.
 
-- `BROWSERSTACK_APP` -> generic fallback, mainly useful if you only run Android
+Use repository secrets because the workflow reads `${{ secrets.BROWSERSTACK_USERNAME }}`, `${{ secrets.BROWSERSTACK_ACCESS_KEY }}`, `${{ secrets.BROWSERSTACK_APP_ANDROID }}`, and `${{ secrets.BROWSERSTACK_APP_IOS }}` directly. Use secrets, not variables, because these values are credentials or app identifiers.
 
-Where to add them in GitHub:
+Optional: add `BROWSERSTACK_DEVICE_PROFILE` as a repository variable under `Settings` -> `Secrets and variables` -> `Actions` -> `Variables` if you want to change the CI device without editing the workflow.
 
-1. Open the repository on GitHub.
-2. Click `Settings`.
-3. In the left sidebar, click `Secrets and variables`, then `Actions`.
-4. Stay on the `Secrets` tab.
-5. In the `Repository secrets` section, click `New repository secret`.
-6. Create these secrets there:
-   `BROWSERSTACK_USERNAME`, `BROWSERSTACK_ACCESS_KEY`, `BROWSERSTACK_APP_ANDROID`, `BROWSERSTACK_APP_IOS`
-
-Use `Repository secrets`, not `Environment secrets`, because this workflow reads `${{ secrets.BROWSERSTACK_USERNAME }}`, `${{ secrets.BROWSERSTACK_ACCESS_KEY }}`, `${{ secrets.BROWSERSTACK_APP_ANDROID }}`, and `${{ secrets.BROWSERSTACK_APP_IOS }}` directly and none of the jobs declare a GitHub Actions `environment`. Use `secrets`, not `variables`, because these values are sensitive credentials and app identifiers. Repository or environment variables are better for non-sensitive values such as a default device profile. If you later introduce a GitHub Actions environment like `staging` or `production`, then environment secrets would make sense for jobs that explicitly reference that environment.
-
-Recommended setup:
-
-1. Push this workflow file to your repository.
-2. In GitHub, open `Settings` -> `Secrets and variables` -> `Actions` -> `Secrets`.
-3. In `Repository secrets`, add `BROWSERSTACK_USERNAME`, `BROWSERSTACK_ACCESS_KEY`, `BROWSERSTACK_APP_ANDROID`, and `BROWSERSTACK_APP_IOS`.
-4. Optional: if you want the CI device to be configurable in GitHub rather than fixed in the workflow, add `BROWSERSTACK_DEVICE_PROFILE` as a repository variable under `Settings` -> `Secrets and variables` -> `Actions` -> `Variables`.
-5. Open the `Actions` tab and confirm that GitHub Actions is enabled for the repository.
-6. Merge or open a pull request to trigger the smoke job.
-7. Use `Run workflow` in the `Actions` tab if you want to trigger the full suite manually before the nightly schedule.
+After setup, open a pull request to trigger the PR jobs, or use `Run workflow` in the `Actions` tab to start the full suite manually.
 
 Notes:
 
@@ -323,6 +296,5 @@ When you switch to `iphone_15`, make sure `BROWSERSTACK_APP_IOS` points to an iO
 - `npx wdio run wdio.conf.js --spec ./test/myNewTest.js` runs one specific test file.
 - `npx wdio run wdio.conf.js` runs all specs under `test/`.
 - `npx wdio run wdio.conf.js --mochaOpts.grep "@smoke"` runs only tests whose title contains `@smoke`.
-- `test/@regression/echoBox.test.js` opens TheApp Echo Box screen using an accessibility id selector.
 - BrowserStack credentials and the platform-specific BrowserStack app reference must be valid for the run to start.
 - The selected device profile affects both single-test and all-tests runs.

@@ -16,19 +16,19 @@ concurrency:
   group: browserstack-mobile-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+  BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+  BROWSERSTACK_APP_ANDROID: ${{ secrets.BROWSERSTACK_APP_ANDROID }}
+  BROWSERSTACK_APP_IOS: ${{ secrets.BROWSERSTACK_APP_IOS }}
+  BROWSERSTACK_DEVICE_PROFILE: ${{ vars.BROWSERSTACK_DEVICE_PROFILE || 'samsung_s22' }}
+
 jobs:
   pr-smoke:
     name: PR smoke suite
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
-      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-      BROWSERSTACK_APP: ${{ secrets.BROWSERSTACK_APP }}
-      BROWSERSTACK_APP_ANDROID: ${{ secrets.BROWSERSTACK_APP_ANDROID }}
-      BROWSERSTACK_APP_IOS: ${{ secrets.BROWSERSTACK_APP_IOS }}
-      BROWSERSTACK_DEVICE_PROFILE: ${{ vars.BROWSERSTACK_DEVICE_PROFILE || 'samsung_s22' }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -47,7 +47,8 @@ jobs:
         run: |
           test -n "$BROWSERSTACK_USERNAME"
           test -n "$BROWSERSTACK_ACCESS_KEY"
-          test -n "$BROWSERSTACK_APP"
+          test -n "$BROWSERSTACK_APP_ANDROID"
+          test -n "$BROWSERSTACK_APP_IOS"
 
       - name: Run smoke tests on BrowserStack
         run: npx wdio run wdio.conf.js --mochaOpts.grep "@smoke"
@@ -57,13 +58,6 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
-      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-      BROWSERSTACK_APP: ${{ secrets.BROWSERSTACK_APP }}
-      BROWSERSTACK_APP_ANDROID: ${{ secrets.BROWSERSTACK_APP_ANDROID }}
-      BROWSERSTACK_APP_IOS: ${{ secrets.BROWSERSTACK_APP_IOS }}
-      BROWSERSTACK_DEVICE_PROFILE: ${{ vars.BROWSERSTACK_DEVICE_PROFILE || 'samsung_s22' }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -82,7 +76,8 @@ jobs:
         run: |
           test -n "$BROWSERSTACK_USERNAME"
           test -n "$BROWSERSTACK_ACCESS_KEY"
-          test -n "$BROWSERSTACK_APP"
+          test -n "$BROWSERSTACK_APP_ANDROID"
+          test -n "$BROWSERSTACK_APP_IOS"
 
       - name: Run boundary tests on BrowserStack
         run: npx wdio run wdio.conf.js --mochaOpts.grep "@boundary"
@@ -92,13 +87,6 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 45
-    env:
-      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
-      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-      BROWSERSTACK_APP: ${{ secrets.BROWSERSTACK_APP }}
-      BROWSERSTACK_APP_ANDROID: ${{ secrets.BROWSERSTACK_APP_ANDROID }}
-      BROWSERSTACK_APP_IOS: ${{ secrets.BROWSERSTACK_APP_IOS }}
-      BROWSERSTACK_DEVICE_PROFILE: ${{ vars.BROWSERSTACK_DEVICE_PROFILE || 'samsung_s22' }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -117,7 +105,8 @@ jobs:
         run: |
           test -n "$BROWSERSTACK_USERNAME"
           test -n "$BROWSERSTACK_ACCESS_KEY"
-          test -n "$BROWSERSTACK_APP"
+          test -n "$BROWSERSTACK_APP_ANDROID"
+          test -n "$BROWSERSTACK_APP_IOS"
 
       - name: Run regression tests on BrowserStack
         run: npx wdio run wdio.conf.js --mochaOpts.grep "@regression"
@@ -127,13 +116,6 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
-      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-      BROWSERSTACK_APP: ${{ secrets.BROWSERSTACK_APP }}
-      BROWSERSTACK_APP_ANDROID: ${{ secrets.BROWSERSTACK_APP_ANDROID }}
-      BROWSERSTACK_APP_IOS: ${{ secrets.BROWSERSTACK_APP_IOS }}
-      BROWSERSTACK_DEVICE_PROFILE: ${{ vars.BROWSERSTACK_DEVICE_PROFILE || 'samsung_s22' }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -152,7 +134,8 @@ jobs:
         run: |
           test -n "$BROWSERSTACK_USERNAME"
           test -n "$BROWSERSTACK_ACCESS_KEY"
-          test -n "$BROWSERSTACK_APP"
+          test -n "$BROWSERSTACK_APP_ANDROID"
+          test -n "$BROWSERSTACK_APP_IOS"
 
       - name: Run navigation tests on BrowserStack
         run: npx wdio run wdio.conf.js --mochaOpts.grep "@navigation"
@@ -162,13 +145,6 @@ jobs:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    env:
-      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
-      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-      BROWSERSTACK_APP: ${{ secrets.BROWSERSTACK_APP }}
-      BROWSERSTACK_APP_ANDROID: ${{ secrets.BROWSERSTACK_APP_ANDROID }}
-      BROWSERSTACK_APP_IOS: ${{ secrets.BROWSERSTACK_APP_IOS }}
-      BROWSERSTACK_DEVICE_PROFILE: ${{ vars.BROWSERSTACK_DEVICE_PROFILE || 'samsung_s22' }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -187,7 +163,8 @@ jobs:
         run: |
           test -n "$BROWSERSTACK_USERNAME"
           test -n "$BROWSERSTACK_ACCESS_KEY"
-          test -n "$BROWSERSTACK_APP"
+          test -n "$BROWSERSTACK_APP_ANDROID"
+          test -n "$BROWSERSTACK_APP_IOS"
 
       - name: Run full suite on BrowserStack
         run: npx wdio run wdio.conf.js
