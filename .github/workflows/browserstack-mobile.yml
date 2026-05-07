@@ -8,8 +8,8 @@ on:
       - "package-lock.json"
       - "wdio.conf.js"
       - "test/**"
-  schedule:
-    - cron: "0 2 * * *"
+  # schedule:
+  #   - cron: "0 2 * * *"
   workflow_dispatch:
 
 concurrency:

@@ -205,7 +205,7 @@ $env:BROWSERSTACK_DEVICE_PROFILE='iphone_15'
 npx wdio run wdio.conf.js --mochaOpts.grep "@ios"
 ```
 
-Run the full nightly suite:
+Run the full nightly suite manually:
 
 ```bash
 npx wdio run wdio.conf.js
@@ -222,7 +222,7 @@ npx wdio run wdio.conf.js --mochaOpts.grep "(?=.*@smoke)(?=.*@android)"
 Typical split:
 
 - Pull request run: `npx wdio run wdio.conf.js --mochaOpts.grep "@smoke"`
-- Nightly run: `npx wdio run wdio.conf.js`
+- Nightly full run, currently manual only because the cron trigger is commented out: `npx wdio run wdio.conf.js`
 
 You can swap `@smoke` for any other tag set that matches your CI strategy.
 
@@ -233,7 +233,8 @@ A ready-to-use workflow is available at [.github/workflows/browserstack-mobile.y
 It does two things:
 
 - on pull requests, it runs separate jobs for `@smoke`, `@boundary`, `@regression`, and `@navigation`
-- on the nightly schedule at `02:00` UTC, and on manual dispatch, it runs the full suite with `npx wdio run wdio.conf.js`
+- on manual dispatch, it runs the `nightly-full` full suite with `npx wdio run wdio.conf.js`
+- the nightly cron line is kept in the workflow as a comment, so the suite is not launched daily
 
 Before it can run in GitHub, create these repository secrets:
 
